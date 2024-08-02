@@ -1,0 +1,6 @@
+FORMAT = 'utf-8'
+DISCONNECT_MESSAGE = "!DISCONNECT"
+HEADER = 64
+
+
+clients = []
