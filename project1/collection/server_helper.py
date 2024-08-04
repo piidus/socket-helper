@@ -1,4 +1,4 @@
-from .global_variable import HEADER, FORMAT, DISCONNECT_MESSAGE, clients
+from .global_variable import  clients, log
 
 
 def broadcast(message, sender_socket):
@@ -8,9 +8,11 @@ def broadcast(message, sender_socket):
                 client.send(message.encode('utf-8'))
             except Exception as e:
                 print(f"Error sending message: {e}")
+                log.error(f"Error sending message: {e}")
 
 def handle_client(client_socket, client_address):
-    print(f"Accepted connection from {client_address}")
+    # print(f"Accepted connection from {client_address}")
+    log.info(f"Accepted connection from {client_address}")
     clients.append(client_socket)
     
     while True:
@@ -18,12 +20,14 @@ def handle_client(client_socket, client_address):
             message = client_socket.recv(1024).decode('utf-8')
             if not message:
                 break
-            print(f"Received from {client_address}: {message}")
+            # print(f"Received from {client_address}: {message}")
+            log.info(f"Received from {client_address}: {message}")
             broadcast(message, client_socket)
         except ConnectionResetError:
             break
     
     print(f"Connection closed by {client_address}")
+    log.info(f"Connection closed by {client_address}")
     clients.remove(client_socket)
     client_socket.close()
 
